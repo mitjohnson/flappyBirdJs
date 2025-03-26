@@ -1,5 +1,4 @@
-import { log } from "console";
-import AssetManager from "./asset-manager.js";
+import AssetManager from "./AssetManager.js";
 import Bird from './Bird.js';
 import PipeManager from "./PipeManager.js";
 

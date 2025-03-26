@@ -114,7 +114,7 @@ export default class PipeManager {
         topPipe.xCord = width;
         topPipe.yCord = this.getRandomPipeSpacing(512);
         bottomPipe.xCord = width;
-        bottomPipe.yCord = topPipe.yCord + 512 +(this.boardH || 640) / 4;
+        bottomPipe.yCord = topPipe.yCord + 512 + height / 4;
 
         topPipe.scored = false;
         bottomPipe.scored = false;
