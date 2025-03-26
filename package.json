@@ -1,0 +1,29 @@
+{
+  "name": "flappybirdjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "copy-html": "cp src/index.html dist/index.html",
+    "copy-css": "cp src/style.css dist/style.css",
+    "build": "tsc --watch",
+    "build:file": "chokidar \"src/**/*.{html,css}\" -c \"npm run copy-html && npm run copy-css\"",
+    "dev": "nodemon --watch 'src/**/*' -x 'tsx' ./server.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.13.11",
+    "chokidar-cli": "^3.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "nodemon": "^3.1.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
