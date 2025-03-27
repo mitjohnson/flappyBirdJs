@@ -1,14 +1,15 @@
 import AssetManager from "./AssetManager.js";
 import Bird from './Bird.js';
 import PipeManager from "./PipeManager.js";
+import Menu from "./Menu.js";
 
-enum GameState {
+export enum GameState {
   RUNNING,
-  PAUSED
+  STOPPED
 };
 
-class Game {
-  private gameState = GameState.PAUSED;
+export class Game {
+  private gameState = GameState.STOPPED;
   private board;
   private ctx;
   private bird: Bird | null = null;
@@ -24,7 +25,6 @@ class Game {
       this.assetManager = new AssetManager();
       if (!this.assetManager) throw new Error('Failed to load AssetManager');
     } catch (e) {
-
       console.error(e);
       return;
     };
@@ -54,12 +54,13 @@ class Game {
         );
         if (!this.bird) throw new Error('Coudn\'t load Bird');
         this.bird.draw();
+        this.pipeManager.update(this.bird);
       })
       .catch(error => {
         console.error(error);
         return;
       })
-      .finally(() => this.startGame());
+      .finally(() => { });
   }
   private startGame = () => {
     this.gameState = GameState.RUNNING;
@@ -88,14 +89,38 @@ class Game {
     loop();
   };
   private keyDownHandler = (e: KeyboardEvent) => {
+    const pauseBtn = document.getElementById('pauseButton');
+    const startBtn = document.getElementById('startButton');
     switch (e.key) {
       case " ":
         e.preventDefault();
-        this.bird ? this.bird.flap() : console.log('The bird is gone??');
+        if (this.getState() === GameState.RUNNING) {
+          this.bird ? this.bird.flap() : console.log('The bird is gone??');
+          break;
+        };
+        if(!startBtn){console.error('couldn\'t find start button'); break;}
+        startBtn.click();
+        break;
+      case "p":
+        if (!pauseBtn) {
+          console.error('couldn\'t find pause button'); break;
+        }
+        pauseBtn.click()
         break;
     }
   };
 
+  public getState = () => { return this.gameState; }
+  public setState = (gameState: GameState) => { this.gameState = gameState };
+  public update = () => {
+    switch (this.gameState) {
+      case GameState.RUNNING:
+        this.startGame();
+        break;
+      case GameState.STOPPED:
+        break;
+    };
+  };
   private initBoard = () => {
     try {
       if (!this.board) throw new Error('Board not found');
@@ -120,5 +145,5 @@ class Game {
   }
 };
 
-new Game(document.getElementById('game-canvas') as HTMLCanvasElement);
+new Menu(new Game(document.getElementById('game-canvas') as HTMLCanvasElement));
 
