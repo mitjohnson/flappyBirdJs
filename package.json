@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "copy-manifest": "cp src/manifest.json dist/manifest.json",
     "copy-html": "cp src/index.html dist/index.html",
     "copy-css": "cp src/style.css dist/style.css",
     "build": "tsc --watch",
-    "build:file": "chokidar \"src/**/*.{html,css}\" -c \"npm run copy-html && npm run copy-css\"",
+    "build:file": "chokidar \"src/**/*.{html,css,json}\" -c \"npm run copy-html && npm run copy-css && npm run copy-manifest\"",
     "dev": "nodemon --watch 'src/**/*' -x 'tsx' ./server.ts"
   },
   "keywords": [],
