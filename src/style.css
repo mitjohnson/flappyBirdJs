@@ -15,7 +15,7 @@ body {
 }
 
 button {
-  position: absolute;
+  position: relative;
 }
 
 #game-canvas {
@@ -26,13 +26,13 @@ button {
 }
 
 #startButton.pauseMenu {
-  bottom: calc(640px / 2);
-  right: 290px;
+  bottom: calc(640px /2);
+  left: calc(260px / 2);
   width: 100px;
 }
 
 #pauseButton.playingMenu {
-  top: calc(640px / 7);
-  right: 190px;
+  bottom: 620px;
+  left: 220px;
   width: 100px;
 };

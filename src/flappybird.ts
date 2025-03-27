@@ -5,7 +5,8 @@ import Menu from "./Menu.js";
 
 export enum GameState {
   RUNNING,
-  STOPPED
+  STOPPED,
+  GAME_OVER
 };
 
 export class Game {
@@ -78,7 +79,19 @@ export class Game {
         this.bird.draw();
 
         this.pipeManager.update(this.bird);
+        if (this.checkCollision(this.bird)) {
+          this.setState(GameState.GAME_OVER);
+          const pauseButton = document.getElementById('pauseButton');
+          const startButton = document.getElementById('startButton');
+          if (!pauseButton || !startButton) throw new Error('Unable to find buttons');
+          pauseButton.style.display = 'none';
+          pauseButton.className = '';
+          pauseButton.focus();
 
+          startButton.style.display = 'block';
+          startButton.className = 'pauseMenu';
+          startButton.innerText = 'Play Again?';
+        };
       } catch (e) { console.error(e); }
 
       if (this.gameState !== GameState.RUNNING) {
@@ -98,16 +111,35 @@ export class Game {
           this.bird ? this.bird.flap() : console.log('The bird is gone??');
           break;
         };
-        if(!startBtn){console.error('couldn\'t find start button'); break;}
-        startBtn.click();
+        if (!startBtn) { console.error('couldn\'t find start button'); break; }
+        startBtn.click()
         break;
       case "p":
-        if (!pauseBtn) {
-          console.error('couldn\'t find pause button'); break;
-        }
+        if (!pauseBtn) { console.error('couldn\'t find pause button'); break; }
         pauseBtn.click()
         break;
     }
+  };
+  public resetBoard = () => {
+    if (!this.bird || !this.board || !this.pipeManager) throw new Error('missing bird, board, or pipeManager');
+    this.bird.x = this.board.height / 8;
+    this.bird.y = this.board.width / 2;
+    this.pipeManager.destroyPipes();
+    this.pipeManager.loadPipes();
+  };
+  private checkCollision = (bird: Bird) => {
+
+    const pipeList = this.pipeManager?.getPipes();
+    if (!pipeList) throw new Error('Unable to get list of pipes');
+
+    for (let i = 0; i < pipeList.length - 1; i++) {
+      if (bird.x + bird.width > pipeList[i].xCord && bird.x < pipeList[i].xCord + pipeList[i].width) {
+        if (bird.y < pipeList[i].yCord + pipeList[i].height && bird.y + bird.height > pipeList[i].yCord) {
+          return true;
+        };
+      };
+    };
+    return false;
   };
 
   public getState = () => { return this.gameState; }

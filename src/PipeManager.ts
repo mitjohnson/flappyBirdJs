@@ -1,6 +1,6 @@
 import Bird from "./Bird";
 
-class Pipe {
+export class Pipe {
   public xCord;
   public yCord;
   public width = 360;
@@ -64,6 +64,8 @@ export default class PipeManager {
     };
   };
 
+  public destroyPipes = () => { this.pipes = [] };
+  public getPipes = () => { return this.pipes }
   public loadPipes = () => {
     const width = (this.boardW || 360);
     const pipeGap = (this.boardH || 640) / 4;

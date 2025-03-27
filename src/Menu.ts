@@ -11,7 +11,7 @@ class Menu {
   private menuState: MenuState = MenuState.START_MENU;
   private startButton = document.getElementById('startButton');
   private pauseButton = document.getElementById('pauseButton');
-  private canvas = document.getElementById('game-canvas');
+  private canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
   private game: Game | null = null;
   constructor(Game: Game) {
 
@@ -44,6 +44,7 @@ class Menu {
       baseButton(this.pauseButton);
 
       const container = document.getElementById('game-container');
+      if (!container) throw new Error('Unable to find comainer element');
       container.appendChild(this.startButton);
       container.appendChild(this.pauseButton);
 
@@ -56,6 +57,7 @@ class Menu {
 
   private handleStart = () => {
     if (!this.game) throw new Error('Couldn\'t find game.')
+    if (this.game.getState() === GameState.GAME_OVER) this.game.resetBoard();
     if (this.game.getState() === GameState.RUNNING) return;
     this.menuState = MenuState.GAME_PLAYING;
     this.game.setState(GameState.RUNNING);
@@ -79,7 +81,6 @@ class Menu {
     this.startButton.style.display = 'block';
     this.startButton.className = 'pauseMenu';
     this.startButton.innerText = text;
-
   };
 
   private playingMenu = () => {
@@ -92,6 +93,9 @@ class Menu {
     this.pauseButton.innerText = 'PAUSE';
   };
   public update = () => {
+
+    if (this.game?.getState() === GameState.GAME_OVER) this.setState(MenuState.GAME_OVER);
+
     switch (this.menuState) {
       case MenuState.GAME_PLAYING:
         this.playingMenu();

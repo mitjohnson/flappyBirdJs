@@ -1,8 +1,8 @@
 export default class Bird {
   public x;
   public y;
-  private width;
-  private height;
+  public width;
+  public height;
   private velocity = 0;
   private gravity = 1;
   private skin;
