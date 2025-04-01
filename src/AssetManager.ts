@@ -27,7 +27,6 @@ export class AssetManager {
 
         img.src = this.assets.images[key];
         img.id = key
-        console.log(key);
         img.onload = () => {
           this.loadedAssets[key] = img;
           this.loadedAssetsCount++;
@@ -45,7 +44,6 @@ export class AssetManager {
   public getAsset(name: string): HTMLImageElement | null {
 
     for (let key in this.loadedAssets) {
-      console.log(this.loadedAssets[key]);
       if (key.toLowerCase() === name.toLowerCase()) {
         return this.loadedAssets[key];
       }

@@ -13,6 +13,7 @@ export class Game {
   private gameState = GameState.STOPPED;
   private board;
   private ctx;
+  private score = 0;
   private bird: Bird | null = null;
   private pipeManager: PipeManager | null = null;
   private assetManager: AssetManager | null = null;
@@ -30,6 +31,7 @@ export class Game {
       return;
     };
 
+    this.addServWorker();
     this.assetManager.preloadAssets()
       .then(() => {
         if (!this.board) throw new Error('No board found');
@@ -78,6 +80,7 @@ export class Game {
         this.bird.draw();
 
         this.pipeManager.update(this.bird);
+
         if (this.checkCollision(this.bird)) {
           this.setState(GameState.GAME_OVER);
           const pauseButton = document.getElementById('pauseButton');
@@ -91,6 +94,19 @@ export class Game {
           startButton.className = 'pauseMenu';
           startButton.innerText = 'Play Again?';
         };
+        const pipes = this.pipeManager.getPipes();
+
+        for (let i = 0; i < pipes.length; i++) {
+          if (pipes[i].isPassed() && !pipes[i].scored) {
+            this.score = this.score + 1;
+            pipes[i].scored = true;
+            break;
+          }
+        };
+
+        this.ctx.font = '20px Arial Black';
+        this.ctx.fillText(String(this.score), this.board.width / 2, this.board.height / 6);
+
       } catch (e) { console.error(e); }
 
       if (this.gameState !== GameState.RUNNING) {
@@ -125,6 +141,7 @@ export class Game {
     this.bird.y = this.board.width / 2;
     this.pipeManager.destroyPipes();
     this.pipeManager.loadPipes();
+    this.score = 0;
   };
   private checkCollision = (bird: Bird) => {
 
@@ -165,7 +182,7 @@ export class Game {
       this.board.width = 360;
       this.board.tabIndex = 0;
       this.board.focus();
-      this.board.style.backgroundImage = 'url("./assets/flappybirdbg.png")';
+      this.board.style.backgroundImage = 'url("/assets/flappybirdbg.png")';
 
       this.board.addEventListener('keydown', this.keyDownHandler, false);
       this.board.addEventListener('click', () => this.bird?.flap());
@@ -179,6 +196,19 @@ export class Game {
     }
 
   }
+  private addServWorker = () => {
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(() => {
+            console.log('Service Worker Registered.');
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      });
+    };
+  };
 };
 
 new Menu(new Game(document.getElementById('game-canvas') as HTMLCanvasElement));
