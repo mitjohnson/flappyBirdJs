@@ -74,7 +74,6 @@ export class Game {
         if (!this.board) throw new Error('unable to find board');
 
         this.ctx.clearRect(0, 0, this.board.width, this.board.height);
-
         this.bird.update();
         this.bird.draw();
 
@@ -129,12 +128,17 @@ export class Game {
   };
   private checkCollision = (bird: Bird) => {
 
+    const birdX = bird.x;
+    const birdY = bird.y;
+    const birdH = bird.height - 30;
+    const birdW = bird.width - 30;
+
     const pipeList = this.pipeManager?.getPipes();
     if (!pipeList) throw new Error('Unable to get list of pipes');
 
-    for (let i = 0; i < pipeList.length - 1; i++) {
-      if (bird.x + bird.width > pipeList[i].xCord && bird.x < pipeList[i].xCord + pipeList[i].width) {
-        if (bird.y < pipeList[i].yCord + pipeList[i].height && bird.y + bird.height > pipeList[i].yCord) {
+    for (let i = 0; i < pipeList.length; ++i) {
+      if ((birdX + birdW) > pipeList[i].xCord && birdX < (pipeList[i].xCord + pipeList[i].width)) {
+        if (birdY < (pipeList[i].yCord + pipeList[i].height) && (birdY + birdH) > pipeList[i].yCord) {
           return true;
         };
       };
