@@ -8,7 +8,8 @@
     "copy-css": "cp src/style.css dist/style.css",
     "build": "tsc --watch",
     "build:file": "chokidar \"src/**/*.{html,css,json}\" -c \"npm run copy-html && npm run copy-css && npm run copy-manifest\"",
-    "dev": "nodemon --watch 'src/**/*' -x 'tsx' ./server.ts"
+    "dev": "nodemon --watch 'src/**/*' -x 'tsx' ./src/server.ts",
+    "start": "node ./dist/server.js"
   },
   "keywords": [],
   "author": "",
