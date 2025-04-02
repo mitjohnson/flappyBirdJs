@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "copy-manifest": "cp src/manifest.json dist/manifest.json",
-    "copy-assets": "cp src/assets/* dist/assets/",
+    "copy-assets": "cp -R src/assets/ dist/assets",
     "copy-html": "cp src/index.html dist/index.html",
     "copy-css": "cp src/style.css dist/style.css",
     "build": "tsc --watch",
