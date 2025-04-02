@@ -10,9 +10,9 @@ export interface LoadedAssets {
 export class AssetManager {
   private assets: Assets = {
     images: {
-      "flappybird": "./assets/flappybird.png",
-      "tPipe": "./assets/toppipe.png",
-      "bPipe": "./assets/bottompipe.png",
+      "flappybird": "/assets/flappybird.png",
+      "tPipe": "/assets/toppipe.png",
+      "bPipe": "/assets/bottompipe.png",
     },
   };
   private loadedAssets: LoadedAssets = {};
